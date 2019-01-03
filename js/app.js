@@ -12,7 +12,7 @@ var Enemy = function() {
 Enemy.prototype.update = function(dt) {
     // 你应该给每一次的移动都乘以 dt 参数，以此来保证游戏在所有的电脑上
     // 都是以同样的速度运行的
-    this.x += 200 * dt
+    this.x += 185 * dt
     this.x > 505 && (this.x = 0)
 };
 
@@ -35,12 +35,16 @@ var Player = function(){
 };
 
 Player.prototype.update = function (dt) {
-    console.log(Math.round(enemy_one.x), Math.round(enemy_one.y), Math.round(enemy_two.x),Math.round(enemy_two.y), Math.round(enemy_three.x),Math.round(enemy_three.y), this.x)
-    // if (this.x < enemy_one.x){
-    //     this.x = 404/2;
-    //     this.y = 435;
-    // }
-    // body...
+
+    allEnemies.forEach(function(enemy){
+        let x = Math.abs(player.x - enemy.x)
+        let y = Math.abs(player.y - enemy.y)
+        if (x < 80 && y < 55  ){
+            player.x = 404/2
+            player.y = 435
+        }
+    })
+
 }
 Player.prototype.render = function (){
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -71,12 +75,12 @@ let enemy_one = new Enemy();
 let enemy_two = new Enemy();
 let enemy_three = new Enemy();
 
-enemy_one.x = 40;
-enemy_one.y = 65;
-enemy_two.x = 160;
-enemy_two.y = 150;
-enemy_three.x = 10;
-enemy_three.y = 235;
+    enemy_one.x = 40;
+    enemy_one.y = 65;
+    enemy_two.x = 160;
+    enemy_two.y = 150;
+    enemy_three.x = 10;
+    enemy_three.y = 235;
 
 let allEnemies = [ enemy_one, enemy_two, enemy_three ]
 

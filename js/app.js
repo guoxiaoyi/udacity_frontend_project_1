@@ -1,3 +1,4 @@
+'use strict';
 // 这是我们的玩家要躲避的敌人
 var Enemy = function() {
     // 要应用到每个敌人的实例的变量写在这里
@@ -5,6 +6,7 @@ var Enemy = function() {
 
     // 敌人的图片，用一个我们提供的工具函数来轻松的加载文件
     this.sprite = 'images/enemy-bug.png';
+    this.speed = Math.random()/100;
 };
 
 // 此为游戏必须的函数，用来更新敌人的位置
@@ -12,8 +14,9 @@ var Enemy = function() {
 Enemy.prototype.update = function(dt) {
     // 你应该给每一次的移动都乘以 dt 参数，以此来保证游戏在所有的电脑上
     // 都是以同样的速度运行的
-    this.x += 185 * dt
-    this.x > 505 && (this.x = 0)
+
+    this.x += 185 * (dt + this.speed)
+    this.x > 505 && (this.x = -101)
 };
 
 // 此为游戏必须的函数，用来在屏幕上画出敌人，
@@ -35,7 +38,6 @@ var Player = function(){
 };
 
 Player.prototype.update = function (dt) {
-
     allEnemies.forEach(function(enemy){
         let x = Math.abs(player.x - enemy.x)
         let y = Math.abs(player.y - enemy.y)
@@ -53,7 +55,7 @@ Player.prototype.handleInput = function(action){
     switch(action){
         case "up":
         this.y -= 85.5;
-        this.y < 0 && (this.y = 0);
+        this.y < 10 && (this.y = 435, alert("到达河边"), this.x = 404/2);
         break;
         case "down":
         this.y += 85.5;
@@ -71,18 +73,17 @@ Player.prototype.handleInput = function(action){
 }
 
 let player = new Player();
-let enemy_one = new Enemy();
-let enemy_two = new Enemy();
-let enemy_three = new Enemy();
+let enemy_number = parseInt(Math.random()*(7-4+1)+4,10)
+let allEnemies = []
 
-    enemy_one.x = 40;
-    enemy_one.y = 65;
-    enemy_two.x = 160;
-    enemy_two.y = 150;
-    enemy_three.x = 10;
-    enemy_three.y = 235;
+while ( enemy_number <= 8){
+    let enemy = new Enemy();
+    enemy.x = 40 * (Math.random()*100) +1;
+    enemy.y = [65, 150, 235][parseInt(Math.random()*(2+1),10)]
+    allEnemies.push(enemy)
+    enemy_number++;
+}
 
-let allEnemies = [ enemy_one, enemy_two, enemy_three ]
 
 
 // 这段代码监听游戏玩家的键盘点击事件并且代表将按键的关键数字送到 Player.handleInput()
